@@ -1,0 +1,30 @@
+# --------------------------------------------------------------------------------
+#Simple example case of NBS explorer
+#Case : Explore Seagrass Nature based solution under scenario settings
+# Yaml file should be written from EDITO plattfrom       
+#
+# Author : Benjamin  Jacob(Hereon)
+# Date   : 27 October 2023
+#
+# Background:
+# 
+#
+#---------------------------------------------------------------------------------
+version: 0.1.10
+
+options:
+   area:
+      min_lon: 8
+      max_lon: 9
+      min_lat: 53.4
+      max_lat: 54.4
+   scenario:
+      SLR: 0
+      period: "storm"
+   Plant Physiology:    
+      stem_diameter: 0.014
+      drag_coefficient: 1
+      canopy_height: 0.02
+   positioning:          
+      upper_limit: 3  
+      lower_limit: -4        
