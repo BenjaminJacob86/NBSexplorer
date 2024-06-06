@@ -52,6 +52,10 @@ import matplotlib.colors as mcolors
 #########################################
 
 
+
+# get environment variable from EDITO
+#os.environ.get("SMALL_DEMO")
+userdir=os.environ.get("EDITO_INFRA_OUTPUT")
 ########## temp test ############
 
 # SLR
@@ -60,6 +64,7 @@ import matplotlib.colors as mcolors
 
 ##### Load input parameters from yaml file ###########
 # define climatic scenario
+os.chdir(userdir) # assume everything is in userdir
 
 file=open('nbsconfig.yaml')
 config = yaml.safe_load(file)
@@ -93,8 +98,8 @@ proj='merc'
 #loadschism=not 's' in locals()
 #if loadschism:
 ###### Load SCHISM
-exps=['Veg_REF',  'Veg_LE', 'Veg_HE', 'Veg_max']
-setupdir=['./grid/'.format(expi) for expi in exps]
+#exps=['Veg_REF',  'Veg_LE', 'Veg_HE', 'Veg_max']
+setupdir='./grid/' #['./grid/'.format(expi) for expi in exps]
 os.chdir(setupdir[0])
 s0=schism_setup() #second instances for overlayed plotting with mask
 s=schism_setup()
@@ -223,7 +228,7 @@ plt.savefig(figname,dpi=300)
 
 s.x,s.y=np.asarray(s.x),np.asarray(s.y)
 
-os.chdir('results/Veg_max/')
+os.chdir('results/SCENARIO/')
 files=glob.glob('*.nc')
 os.chdir('../../')
 files=[file for file in files if ('X' not in file) and ('Y' not in file)]
@@ -235,7 +240,6 @@ for key,val in zip(shortconfig,files):
     loaddict[key]=val
 
 plotvars=['totalSuspendedLoad','sigWaveHeight']
-
 units={'totalSuspendedLoad':'[g/L]','sigWaveHeight':'[m]'}
 
 for  plotvar in plotvars:
@@ -244,8 +248,8 @@ for  plotvar in plotvars:
 
     #temp=myvar.split('_')
     # load reference scenario
-    ds0=xr.open_dataset('results/Veg_CNTRL/'+loaddict[plotvar])
-    ds1=xr.open_dataset('results/Veg_max/'+loaddict[plotvar])
+    ds0=xr.open_dataset('results/CNTRL/'+loaddict[plotvar])
+    ds1=xr.open_dataset('results/SCENARIO/'+loaddict[plotvar])
 
 
     myvar=list(ds1.variables)[0]
@@ -278,8 +282,8 @@ for  plotvar in plotvars:
 
 ## Risk maps
 plotvar='CriticalBottomStressRatio.nc'
-ds0=xr.open_dataset('results/Veg_CNTRL/'+loaddict[plotvar])
-ds1=xr.open_dataset('results/Veg_max/'+loaddict[plotvar])
+ds0=xr.open_dataset('results/CNTRL/'+loaddict[plotvar])
+ds1=xr.open_dataset('results/SCENARIO/'+loaddict[plotvar])
 
 
 plotdata[plotnodes]=delta[plotnodes]*w # weight

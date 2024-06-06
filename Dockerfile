@@ -1,7 +1,8 @@
 FROM python:3.9-slim
 
 WORKDIR /app
-VOLUME /app                # Volume ist argument to be given ti lkink host system folder
+#VOLUME /app                # Volume ist argument to be given ti lkink host system folder
+# Do not use volume for edit system?
 COPY requirements.txt .
 
 
