@@ -58,9 +58,13 @@ import matplotlib.colors as mcolors
 userdir=os.environ.get("EDITO_INFRA_OUTPUT")
 ########## temp test ############
 
+print(userdir)
+
 # SLR
 # Min Lon  Max Lon  
 
+
+#$windows set nv variable: $Env:EDITO_INFRA_OUTPUT = 'C:\Users\jacobb\Documents\GitHub\NBSexplorer'
 
 ##### Load input parameters from yaml file ###########
 # define climatic scenario
