@@ -66,7 +66,7 @@ userdir=os.environ.get("EDITO_INFRA_OUTPUT")
 # define climatic scenario
 os.chdir(userdir) # assume everything is in userdir
 
-file=open('nbsconfig.yaml')
+file=open(userdir+'nbsconfig.yaml')
 config = yaml.safe_load(file)
 
 SLR=config['options']['scenario']['SLR']
@@ -99,7 +99,7 @@ proj='merc'
 #if loadschism:
 ###### Load SCHISM
 #exps=['Veg_REF',  'Veg_LE', 'Veg_HE', 'Veg_max']
-setupdir='./grid/' #['./grid/'.format(expi) for expi in exps]
+setupdir=userdir+'/grid/' #['./grid/'.format(expi) for expi in exps]
 os.chdir(setupdir[0])
 s0=schism_setup() #second instances for overlayed plotting with mask
 s=schism_setup()
@@ -228,9 +228,11 @@ plt.savefig(figname,dpi=300)
 
 s.x,s.y=np.asarray(s.x),np.asarray(s.y)
 
-os.chdir('results/SCENARIO/')
+os.chdir(userdir+'/results/SCENARIO/')
 files=glob.glob('*.nc')
-os.chdir('../../')
+#os.chdir('../../')
+os.chdir(userdir)
+
 files=[file for file in files if ('X' not in file) and ('Y' not in file)]
 shortconfig=[file.split('_')[0] for file in files]
 varlist=shortconfig
@@ -248,8 +250,8 @@ for  plotvar in plotvars:
 
     #temp=myvar.split('_')
     # load reference scenario
-    ds0=xr.open_dataset('results/CNTRL/'+loaddict[plotvar])
-    ds1=xr.open_dataset('results/SCENARIO/'+loaddict[plotvar])
+    ds0=xr.open_dataset(userdir+'/results/CNTRL/'+loaddict[plotvar])
+    ds1=xr.open_dataset(userdir+'/results/SCENARIO/'+loaddict[plotvar])
 
 
     myvar=list(ds1.variables)[0]
@@ -282,8 +284,8 @@ for  plotvar in plotvars:
 
 ## Risk maps
 plotvar='CriticalBottomStressRatio.nc'
-ds0=xr.open_dataset('results/CNTRL/'+loaddict[plotvar])
-ds1=xr.open_dataset('results/SCENARIO/'+loaddict[plotvar])
+ds0=xr.open_dataset(userdir+'/results/CNTRL/'+loaddict[plotvar])
+ds1=xr.open_dataset(userdir+'/results/SCENARIO/'+loaddict[plotvar])
 
 
 plotdata[plotnodes]=delta[plotnodes]*w # weight
@@ -333,7 +335,7 @@ plt.sca(ax)
 plt.title('Erosion Risk - With NbS')
 plt.tight_layout()
 figname='{:.01f}E_{:.01f}E_{:.0f}N_{:.1f}_SG{:.1f}-{:.1f}_{:s}_nbs_ErosionRisk.png'.format(LONmin,LONmax,LATmin,LATmax,Dupper,Dlower,temp[0])
-plt.savefig(figname,dpi=300)
+plt.savefig(userdir+'/'+figname,dpi=300)
 
 ## bin into intervalls for risk level reduction
 bins=[0,0.25,.5,.75]
@@ -379,4 +381,4 @@ plt.sca(ax)
 plt.title('Erosion Risk level change due to NBS')
 plt.tight_layout()
 figname='{:.01f}E_{:.01f}E_{:.0f}N_{:.1f}_SG{:.1f}-{:.1f}_{:s}_nbs_ErosionRiskReduction.png'.format(LONmin,LONmax,LATmin,LATmax,Dupper,Dlower,temp[0])
-plt.savefig(figname,dpi=300)
+plt.savefig(userdir+'/'+figname,dpi=300)
