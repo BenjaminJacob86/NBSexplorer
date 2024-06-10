@@ -17,4 +17,3 @@ RUN apt-get update && apt-get install -y libx11-6 libxext-dev libxrender-dev lib
 CMD ["python","main.py"] # "python -m" instead "python" adds local directory
 #CMD ["python -m","main.py"] # "python -m" instead "python" adds local directory
 
-# doesnt like empty space
