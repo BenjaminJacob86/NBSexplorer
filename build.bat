@@ -1,4 +1,3 @@
-docker build –t nbs-explorer .   
-
-docker tag docker/nbs-explorer benjaminjacob86/nbs-explorer:v1.01
+docker build –t nbs-explorer-job .
+docker tag docker/nbs-explorer-job benjaminjacob86/nbs-explorer-job:v1.0
 

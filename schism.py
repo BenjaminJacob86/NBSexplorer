@@ -491,7 +491,10 @@ class schism_setup(object):
       from matplotlib.widgets import PolygonSelector
       
       ph,cx,ax=self.plotAtnodes(self.depths)
-      #plt.sca(ax)	  
+      try:
+          plt.sca(ax)	  
+      except:
+          pass
       self.selector = PolygonSelector(ax, lambda *args: None)
       
       if not hasattr(self,'reg'):
@@ -853,7 +856,11 @@ class schism_setup(object):
       divider = make_axes_locatable(ax)
       cax = divider.append_axes("right", size="5%", pad=0.05, axes_class=plt.Axes)
       ch=plt.colorbar(ph,cax=cax,extend=extend)
-      #plt.sca(ax)
+      try:
+          plt.sca(ax)
+      except:
+          pass
+
       return ph,ch,ax
 
   def plotAtelems(self,values,cmap=plt.cm.viridis,mask=None,latlon=True,extend='neither'):
@@ -900,13 +907,10 @@ class schism_setup(object):
           proj=ccrs.PlateCarree()  # define Prijection
 
 
-      if landcolor=='default':
-        landcolor=cfeature.COLORS['land']
-        landcolor=landcolor
-	  
-      #land_10m = cfeature.NaturalEarthFeature('physical', 'land', '10m',edgecolor='face',facecolor=cfeature.COLORS['land'])
-      land_10m = cfeature.NaturalEarthFeature('physical', 'land', '10m',edgecolor='face',facecolor=landcolor)      
+      #landcolor='default'		  
+      land_10m = cfeature.NaturalEarthFeature('physical', 'land', '10m',edgecolor='face',facecolor=cfeature.COLORS['land'])
       ocean_10m = cfeature.NaturalEarthFeature('physical', 'ocean', '10m', edgecolor='face',facecolor=[0,0,1])
+      #zoom_extend=(np.min(s.lon)-0.1, np.max(s.lon)+0.02, np.min(s.lat)-0.04, np.max(s.lat)+0.1)
 	  
       if region_limit==None:
         zoom_extend=(np.min(self.lon)-offset,np.max(self.lon)+offset, np.min(self.lat)-offset, np.max(self.lat)+offset)
@@ -944,7 +948,6 @@ class schism_setup(object):
       #ch=plt.colorbar(extend=extend)
       plt.tight_layout()
 
-
 	  
       # scale colorbar to 1 and 99% quantile
       #from IPython import embed; embed()
@@ -962,24 +965,18 @@ class schism_setup(object):
       #xticks=np.unique(np.round(np.linspace((lon.min()),(lon.max()),8),1))
       #yticks=np.unique(np.round(np.linspace((lat.min()),(lat.max()),8),1))
       ax.set_extent(zoom_extend)
-      #longrange=np.max(self.lon)-np.min(self.lon)
-      #latrange=np.max(self.lat)-np.min(self.lat)
-      longrange=zoom_extend[1]-zoom_extend[0]
-      latrange=zoom_extend[3]-zoom_extend[2]      
+      longrange=np.max(self.lon)-np.min(self.lon)
+      latrange=np.max(self.lat)-np.min(self.lat)
       ratio=latrange/longrange
-      refticks=6#8
       if ratio > 1:
-        nxticks=int(np.floor(refticks*ratio))
-        nyticks=refticks
+        nxticks=int(np.floor(8/ratio))
+        nyticks=8
       else:
-        nxticks=refticks
-        nyticks=int(np.floor(refticks*ratio))
+        nxticks=8
+        nyticks=int(np.floor(8*ratio))
       
-      #xticks=np.unique(np.round(np.linspace((lon.min()),(lon.max()),nxticks),1))
-      #yticks=np.unique(np.round(np.linspace((lat.min()),(lat.max()),nyticks),1))
-      xticks=np.unique(np.round(np.linspace((zoom_extend[0]),(zoom_extend[1]),nxticks),1))
-      yticks=np.unique(np.round(np.linspace((zoom_extend[2]),(zoom_extend[3]),nyticks),1))
-
+      xticks=np.unique(np.round(np.linspace((lon.min()),(lon.max()),nxticks),1))
+      yticks=np.unique(np.round(np.linspace((lat.min()),(lat.max()),nyticks),1))
 
 
       ax.set_xticks(xticks, crs=ccrs.PlateCarree())
@@ -1026,6 +1023,7 @@ class schism_setup(object):
       #landcolor='default'	
       if landcolor=='default':
         landcolor=cfeature.COLORS['land']
+      else:
         landcolor=landcolor
 	  
       #land_10m = cfeature.NaturalEarthFeature('physical', 'land', '10m',edgecolor='face',facecolor=cfeature.COLORS['land'])
@@ -1086,11 +1084,8 @@ class schism_setup(object):
       #xticks=np.unique(np.round(np.linspace((lon.min()),(lon.max()),8),1))
       #yticks=np.unique(np.round(np.linspace((lat.min()),(lat.max()),8),1))
       ax.set_extent(zoom_extend)
-      
-      longrange=zoom_extend[1]-zoom_extend[0]
-      latrange=zoom_extend[3]-zoom_extend[2]
-      #longrange=np.max(self.lon)-np.min(self.lon)
-      #latrange=np.max(self.lat)-np.min(self.lat)
+      longrange=np.max(self.lon)-np.min(self.lon)
+      latrange=np.max(self.lat)-np.min(self.lat)
       ratio=latrange/longrange
       if ratio > 1:
         nxticks=int(np.floor(8/ratio))
@@ -1099,12 +1094,8 @@ class schism_setup(object):
         nxticks=8
         nyticks=int(np.floor(8*ratio))
       
-      #xticks=np.unique(np.round(np.linspace((lon.min()),(lon.max()),nxticks),1))
-      #yticks=np.unique(np.round(np.linspace((lat.min()),(lat.max()),nyticks),1))
-
-      xticks=np.unique(np.round(np.linspace((zoom_extend[0]),(zoom_extend[1]),nxticks),1))
-      yticks=np.unique(np.round(np.linspace((zoom_extend[2]),(zoom_extend[3]),nyticks),1))
-
+      xticks=np.unique(np.round(np.linspace((lon.min()),(lon.max()),nxticks),1))
+      yticks=np.unique(np.round(np.linspace((lat.min()),(lat.max()),nyticks),1))
 
 
       ax.set_xticks(xticks, crs=ccrs.PlateCarree())
@@ -1800,4 +1791,3 @@ if __name__ == '__main__':
       figure()
       plot(t[:],e[:,50])
       show()
-
